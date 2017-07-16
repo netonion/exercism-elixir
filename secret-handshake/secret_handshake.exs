@@ -15,34 +15,10 @@ defmodule SecretHandshake do
   """
   @spec commands(code :: integer) :: list(String.t())
   def commands(code) do
-    com = []
-    reverse = false
-    if code > 31 do
-      code = code - 32 
-    end
-    if code > 15 do
-      reverse = true
-      code = code - 16
-    end
-    if code > 7 do
-      com = ["jump"] ++ com
-      code = code - 8
-    end
-    if code > 3 do
-      com = ["close your eyes"] ++ com
-      code = code - 4
-    end
-    if code > 1 do
-      com = ["double blink"] ++ com
-      code = code - 2
-    end
-    if code > 0 do
-      com = ["wink"] ++ com
-    end
-    if reverse do
-      com = Enum.reverse(com)
-    end
-    com
+    <<r::1, d::1, c::1, b::1, a::1>> = <<code::5>>
+    commands =
+      [{a, "wink"}, {b, "double blink"}, {c, "close your eyes"}, {d, "jump"}]
+      |> Enum.filter_map(fn {x, _} -> x == 1 end, fn {_, x} -> x end)
+    r == 1 && Enum.reverse(commands) || commands
   end
 end
-
