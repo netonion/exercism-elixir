@@ -29,6 +29,21 @@ defmodule RunLengthEncoder do
 
   @spec decode(String.t) :: String.t
   def decode(string) do
+    # reduce to {"expanded", previous_digits}
+    reducer = fn x, {acc, prev} ->
+      case Integer.parse(x) do
+        {n, _} -> {acc, prev * 10 + n} # x is a digit
+        :error -> # x is a character
+          case prev do
+            0 -> {acc <> x, 0}
+            _ -> {acc <> String.duplicate(x, prev), 0}
+          end
+      end
+    end
 
+    string
+    |> String.codepoints
+    |> Enum.reduce({"", 0}, reducer)
+    |> elem(0)
   end
 end
