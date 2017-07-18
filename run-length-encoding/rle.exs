@@ -9,12 +9,9 @@ defmodule RunLengthEncoder do
   @spec encode(String.t) :: String.t
   def encode(string) do
     # reduce string to [{A, 2}, {B, 3}, ...] in reversed order
-    reducer = fn x, acc ->
-      case acc do
-        [] -> [{x, 1}]
-        [{^x, n} | rest] -> [{x, n + 1} | rest]
-        _ -> [{x, 1} | acc]
-      end
+    reducer = fn
+      x, [{x, n} | rest] -> [{x, n + 1} | rest]
+      x, acc -> [{x, 1} | acc]
     end
 
     mapper = fn
