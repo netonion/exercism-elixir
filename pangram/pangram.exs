@@ -14,14 +14,8 @@ defmodule Pangram do
 
   @spec pangram?(String.t) :: boolean
   def pangram?(sentence) do
-    a_to_z = Enum.to_list(?a..?z) |> List.to_string
-
-    sentence
-    |> String.downcase
-    |> String.codepoints
-    |> Enum.uniq
-    |> Enum.sort
-    |> Enum.join
-    |> String.contains?(a_to_z)
+    alphabet = ?a..?z |> Enum.to_list
+    charlist = sentence |> String.downcase |> to_charlist
+    alphabet -- charlist == []
   end
 end
