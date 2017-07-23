@@ -4,24 +4,16 @@ defmodule BracketPush do
   """
   @spec check_brackets(String.t) :: boolean
   def check_brackets(str) do
-    str |> String.codepoints |> _check([])
+    str
+    |> String.codepoints
+    |> Enum.reduce([], fn
+      x, acc when x in ["[", "{", "("] -> [x | acc] # push opening bracket to stack
+      "]", ["[" | acc] -> acc # pop matching opening bracket from stack
+      "}", ["{" | acc] -> acc
+      ")", ["(" | acc] -> acc
+      x, _ when x in ["]", "}", ")"] -> [false] # unmatched bracket. just fail
+      _, acc -> acc # irrelevant chars
+    end)
+    |> Enum.empty? # stack should be empty
   end
-
-  defp _check([], []), do: true
-  defp _check([], _), do: false
-
-  defp _check([head | tail], stack) when head in ["[", "{", "("] do
-    _check(tail, [head | stack])
-  end
-
-  defp _check(["]" | tail], ["[" | stack]), do: _check(tail, stack)
-  defp _check(["]" | _], _), do: false
-
-  defp _check(["}" | tail], ["{" | stack]), do: _check(tail, stack)
-  defp _check(["}" | _], _), do: false
-
-  defp _check([")" | tail], ["(" | stack]), do: _check(tail, stack)
-  defp _check([")" | _], _), do: false
-
-  defp _check([_ | tail], stack), do: _check(tail, stack)
 end
