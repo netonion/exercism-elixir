@@ -4,17 +4,15 @@ defmodule Roman do
           {  10, "X"}, {  9, "IX"}, {  5, "V"}, {  4, "IV"},
           {   1, "I"}]
 
-  for {bound, roman} <- @rules do
-    defp translate(number) when number >= unquote(bound) do
-      unquote(roman) <> translate(number - unquote(bound))
-    end
-  end
-
-  defp translate(0), do: ""
-
   @doc """
   Convert the number to a roman number.
   """
   @spec numerals(pos_integer) :: String.t
-  def numerals(number), do: translate(number)
+  for {bound, roman} <- @rules do
+    def numerals(number) when number >= unquote(bound) do
+      unquote(roman) <> numerals(number - unquote(bound))
+    end
+  end
+
+  def numerals(0), do: ""
 end
