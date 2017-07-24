@@ -44,8 +44,7 @@ defmodule Matrix do
   """
   @spec columns(matrix :: %Matrix{}) :: list(list(integer))
   def columns(matrix) do
-    len = length hd(matrix.matrix)
-    0 .. len - 1 |> Enum.map(&column(matrix, &1))
+    matrix.matrix |> Enum.zip |> Enum.map(&Tuple.to_list/1)
   end
 
   @doc """
