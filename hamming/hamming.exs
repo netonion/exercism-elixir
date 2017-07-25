@@ -12,7 +12,8 @@ defmodule Hamming do
     {:error, "Lists must be the same length"}
   end
 
-  def hamming_distance(strand1, strand2) do
-    {:ok, Enum.zip(strand1, strand2) |> Enum.count(fn {x, y} -> x != y end)}
-  end
+  def hamming_distance(strand1, strand2), do: {:ok, hamming(strand1, strand2)}
+  defp hamming([], []), do: 0
+  defp hamming([h | t1], [h | t2]), do: hamming(t1, t2)
+  defp hamming([_ | t1], [_ | t2]), do: 1 + hamming(t1, t2)
 end
