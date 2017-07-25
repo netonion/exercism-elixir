@@ -4,11 +4,7 @@ defmodule Isogram do
   """
   @spec isogram?(String.t) :: boolean
   def isogram?(sentence) do
-    sentence
-    |> String.replace(~r/\W/, "")
-    |> String.codepoints
-    |> Enum.sort
-    |> Enum.chunk_by(&(&1))
-    |> Enum.all?(&(length(&1) == 1))
+    words = Regex.scan(~r/\w/, sentence)
+    words == Enum.uniq(words)
   end
 end
