@@ -25,7 +25,7 @@ defmodule Phone do
   @spec number(String.t) :: String.t
   def number(raw) do
     dense = raw |> String.replace(~r/\W/, "")
-    case Regex.run(~r/^1?(?=[^01])\d{3}(?=[^01])\d{7}$/, dense) do
+    case Regex.run(~r/^1?(?![01])\d{3}(?![01])\d{7}$/, dense) do
       [<<"1", num::bytes-size(10)>>] -> num
       [num] -> num
       nil -> "0000000000"
