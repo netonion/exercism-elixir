@@ -17,15 +17,13 @@ defmodule Hexadecimal do
 
   @spec to_decimal(binary) :: integer
   def to_decimal(hex) do
-    hex |> String.downcase |> String.to_charlist |> decimal(0)
+    hex
+    |> String.downcase
+    |> String.to_charlist
+    |> Enum.reduce_while(0, fn
+        digit, acc when digit in (?0..?9) -> {:cont, acc * 16 + digit - ?0}
+        digit, acc when digit in (?a..?f) -> {:cont, acc * 16 + digit - ?a + 10}
+        _, _ -> {:halt, 0}
+       end)
   end
-
-  defp decimal([], acc), do: acc
-  defp decimal([head | tail], acc) when head in (?0..?9) do
-    decimal(tail, acc * 16 + (head - ?0))
-  end
-  defp decimal([head | tail], acc) when head in (?a..?f) do
-    decimal(tail, acc * 16 + (head - ?a + 10))
-  end
-  defp decimal(_, _), do: 0
 end
