@@ -1,4 +1,3 @@
-
 defmodule Change do
   @doc """
     Determine the least number of coins to be given to the user such
